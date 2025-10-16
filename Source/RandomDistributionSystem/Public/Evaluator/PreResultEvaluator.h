@@ -4,15 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "EvaluatorBase.h"
-#include "RandomDistributionExecutionEvaluator.h"
+#include "RandomDistributionExecution.h"
 #include "PreResultEvaluator.generated.h"
 
 struct FRandomDistributionExecutionParams;
 struct FRandomDistributionRow;
 
 /**
- * This class has an opportunity to modify a copy of the DistributionDataTable and the DistributionRows before any Items
- * are added to the Result.
+ * This class can modify the values of the DistributionRows before they are processed in the Execution.
  */
 UCLASS(BlueprintType, Blueprintable, Abstract)
 class RANDOMDISTRIBUTIONSYSTEM_API UPreResultEvaluator : public UEvaluatorBase
@@ -24,7 +23,7 @@ public:
 	UPreResultEvaluator();
 
 	/**
-	 * Allows you to modify the value of the DistributionRow before it is added to the result.
+	 * Allows you to modify the values in the Row before it is processed in the Execution.
 	 * @param ExecutionParams The context of the Evaluator.
 	 * @param Row The mutable row to update.
 	 */
@@ -32,7 +31,7 @@ public:
 
 	/**
 	 * Called after all rows have been evaluated in EvaluateRowPreResult. Allows you to modify the Rows array and
-	 * other parameters before any rows are added to the result.
+	 * make further modifications before the Execution processes the Rows.
 	 * @param ExecutionParams The context of the Evaluator.
 	 * @param Rows The mutable array of rows.
 	 */
@@ -41,7 +40,7 @@ public:
 protected:
 	
 	/**
-	 * Allows you to modify the values of the DistributionRow before any Rows are added to the result.
+	 * Allows you to modify the values in the Row before it is processed in the Execution.
 	 * @param ExecutionParams The context of the Evaluator.
 	 * @param Row The mutable row to update.
 	 */
@@ -50,7 +49,7 @@ protected:
 
 	/**
 	 * Called after all rows have been evaluated in EvaluateRowPreResult. Allows you to modify the Rows array and
-	 * other parameters before any rows are added to the result.
+	 * make further modifications before the Execution processes the Rows.
 	 * @param ExecutionParams The context of the Evaluator.
 	 * @param Rows The mutable array of rows.
 	 */

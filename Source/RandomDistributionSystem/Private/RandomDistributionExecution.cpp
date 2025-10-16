@@ -1,24 +1,23 @@
 ﻿// Copyright Soccertitan
 
 
-#include "RandomDistributionExecutionEvaluator.h"
+#include "RandomDistributionExecution.h"
 
 #include "RandomDistributionTypes.h"
-#include "Engine/AssetManager.h"
 #include "Evaluator/DistributionItemSelectedEvaluator.h"
 #include "Evaluator/PostResultEvaluator.h"
 #include "Evaluator/PreResultEvaluator.h"
 #include "Evaluator/RandomizerEvaluator.h"
 
 
-URandomDistributionExecutionEvaluator::URandomDistributionExecutionEvaluator()
+URandomDistributionExecution::URandomDistributionExecution()
 {
 	Randomizer = CreateDefaultSubobject<URandomizerEvaluator>("RandomizerEvaluator");
 }
 
-bool URandomDistributionExecutionEvaluator::GenerateResults(const FRandomDistributionExecutionParams& ExecutionParams, TArray<TInstancedStruct<FDistributionItem>>& OutResults)
+bool URandomDistributionExecution::GenerateResults(const FRandomDistributionExecutionParams& ExecutionParams, TArray<TInstancedStruct<FDistributionItem>>& OutResults)
 {
-	if (!IsValid(ExecutionParams.DataTable) ||
+	if (!ExecutionParams.DataTable ||
 		!ExecutionParams.DataTable->GetRowStruct()->IsChildOf(FRandomDistributionDataTable::StaticStruct()) ||
 		!Randomizer ||
 		ExecutionParams.Count <= 0)
@@ -46,7 +45,7 @@ bool URandomDistributionExecutionEvaluator::GenerateResults(const FRandomDistrib
 	return true;
 }
 
-void URandomDistributionExecutionEvaluator::EvaluateTable(const UDataTable* Table, int32 Count, const FRandomDistributionExecutionParams& ExecutionParams,
+void URandomDistributionExecution::EvaluateTable(const UDataTable* Table, int32 Count, const FRandomDistributionExecutionParams& ExecutionParams,
 	TArray<TInstancedStruct<FDistributionItem>>& Results)
 {
 	//----------------------------------------------------------------------------------------
@@ -83,8 +82,8 @@ void URandomDistributionExecutionEvaluator::EvaluateTable(const UDataTable* Tabl
 	}
 
 	//----------------------------------------------------------------------------------------
-	// 2. Add all MutableRows that are AlwaysPicked and Enabled.
-	// Also add the other enabled rows to a SelectableRows array. This will get passed to the
+	// 2. AddItemToResults for all MutableRows that are AlwaysPicked and Enabled.
+	// Then add the enabled rows to a SelectableRows array. This will get passed to the
 	// randomizer for processing.
 	//----------------------------------------------------------------------------------------
 	TArray<FRandomDistributionRow> SelectableRows;
@@ -120,7 +119,7 @@ void URandomDistributionExecutionEvaluator::EvaluateTable(const UDataTable* Tabl
 
 			if (SelectedRow.bIsUnique)
 			{
-				// Removed based on the FName in the SelectedRow. Which should be unique from a DataTable.
+				// Removed based on the FGuid in the SelectedRow. Which should be unique.
 				SelectableRows.Remove(SelectedRow);
 			}
 			AddItemToResults(SelectedRow.Item, ExecutionParams, Results);
@@ -128,7 +127,7 @@ void URandomDistributionExecutionEvaluator::EvaluateTable(const UDataTable* Tabl
 	}
 }
 
-void URandomDistributionExecutionEvaluator::AddItemToResults(TInstancedStruct<FDistributionItem> Item, const FRandomDistributionExecutionParams& ExecutionParams, TArray<TInstancedStruct<FDistributionItem>>& Results)
+void URandomDistributionExecution::AddItemToResults(TInstancedStruct<FDistributionItem> Item, const FRandomDistributionExecutionParams& ExecutionParams, TArray<TInstancedStruct<FDistributionItem>>& Results)
 {
 	// Must have a valid Item to be added to the result.
 	if (Item.IsValid())
@@ -143,11 +142,9 @@ void URandomDistributionExecutionEvaluator::AddItemToResults(TInstancedStruct<FD
 		
 		if (const FDistributionItem_Table* Table = Item.GetPtr<FDistributionItem_Table>())
 		{
-			if (!Table->DataTable.Get())
-			{
-				UAssetManager::Get().LoadAssetList({Table->DataTable.ToSoftObjectPath()})->WaitUntilComplete();
-			}
-			if (Table->Count > 0)
+			if (Table->DataTable &&
+				Table->DataTable->GetRowStruct()->IsChildOf(FRandomDistributionDataTable::StaticStruct()) &&
+				Table->Count > 0)
 			{
 				EvaluateTable(Table->DataTable.Get(), Table->Count, ExecutionParams, Results);
 			}

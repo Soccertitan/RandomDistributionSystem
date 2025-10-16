@@ -5,20 +5,20 @@
 #include "CoreMinimal.h"
 #include "RandomDistributionTypes.h"
 #include "UObject/Object.h"
-#include "RandomDistributionExecutionEvaluator.generated.h"
+#include "RandomDistributionExecution.generated.h"
 
 class URandomizerEvaluator;
 class UPostResultEvaluator;
 class UDistributionItemSelectedEvaluator;
 class UPreResultEvaluator;
-class URandomDistributionExecutionEvaluator;
+class URandomDistributionExecution;
 
 /**
- * URandomDistributionExecutionEvaluator
+ * URandomDistributionExecution
  *
- * An object to easily randomly select items from a RandomDistributionDataTable. There are four different types of
+ * An object to easily randomly select items from a RandomDistributionDataTable. There are three different types of
  * evaluators that are used through the GenerateResults process. They are called in order PreResult, Randomizer,
- * OnItemSelected, and PostResult evaluators.
+ * and PostResult evaluators.
  *
  * PreResultEvaluator:
  *		- Has two functions,
@@ -30,11 +30,11 @@ class URandomDistributionExecutionEvaluator;
  *		- The ExecutionEvaluator requires a valid Randomizer to function. Its primary purpose is to choose a row to return.
  *		- You have mutable access to the SelectableRows array, you can continue to modify properties if desired.
  *
- * DistributionItemSelectedEvaluator:
- *		- Provides an opportunity to trigger responses when an item is selected from the row.
- *
  * PostResultEvaluator:
  *		- Provides a place to modify the Results after evaluation or call other functions.
+ *
+ * DistributionItemSelectedEvaluator:
+ *		- Provides an opportunity to trigger responses whenever an item is selected from the row.
  */
 
 /**
@@ -42,12 +42,12 @@ class URandomDistributionExecutionEvaluator;
  * by the RandomizerEvaluator.
  */
 UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
-class RANDOMDISTRIBUTIONSYSTEM_API URandomDistributionExecutionEvaluator : public UObject
+class RANDOMDISTRIBUTIONSYSTEM_API URandomDistributionExecution : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	URandomDistributionExecutionEvaluator();
+	URandomDistributionExecution();
 	
 	/**
 	 * Generates an array of Results from a RandomDistributionDataTable.
@@ -79,7 +79,7 @@ protected:
 private:
 
 	/**
-	 * Runs through the process of adding Items to the Results. Calling on RowSelected when a row is added to the Results.
+	 * Runs through the process of adding Items to the Results. Calling OnRowSelected when a row is added to the Results.
 	 * 1. Makes a mutable copy of the RandomDistributionDataTable.
 	 * 2. Runs the PreResultEvaluators on each Row then the RandomDistributionDataTable itself.
 	 *		The first opportunity to modify the Row's values before selection occurs.

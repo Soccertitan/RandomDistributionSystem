@@ -6,13 +6,13 @@
 #include "EvaluatorBase.h"
 #include "PostResultEvaluator.generated.h"
 
-class URandomDistributionExecutionEvaluator;
+class URandomDistributionExecution;
 struct FRandomDistributionExecutionParams;
 struct FRandomDistributionRow;
 
 /**
- * Occurs after the result has been calculated and the result set is complete, but before
- * the RandomDistributionExecutionEvaluator exits.
+ * Occurs after the Execution has finished and the result set is complete, but before
+ * the RandomDistributionExecution exits.
  */
 UCLASS(BlueprintType, Blueprintable, Abstract)
 class RANDOMDISTRIBUTIONSYSTEM_API UPostResultEvaluator : public UEvaluatorBase
@@ -23,8 +23,8 @@ public:
 	UPostResultEvaluator();
 
 	/**
-	 * Allows you to make further changes to the Result before the ExecutionEvaluator finishes.
-	 * @param ExecutionParams The context of the Evaluator.
+	 * Allows you to make further changes to the Result before the Execution finishes.
+	 * @param ExecutionParams The context of the Execution.
 	 * @param Result A collection of all the rows that were selected.
 	 */
 	virtual void EvaluatePostResult(
@@ -35,8 +35,8 @@ public:
 protected:
 	
 	/**
-	 * Allows you to make further changes to the Result before the ExecutionEvaluator finishes.
-	 * @param ExecutionParams The context of the Evaluator.
+	 * Allows you to make further changes to the Result before the Execution finishes.
+	 * @param ExecutionParams The context of the Execution.
 	 * @param Result A collection of all the rows that were selected.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, DisplayName = "EvaluatePostResult")

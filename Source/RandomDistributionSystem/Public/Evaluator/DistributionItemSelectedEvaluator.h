@@ -11,7 +11,7 @@ struct FRandomDistributionRow;
 struct FRandomDistributionExecutionParams;
 
 /**
- * Called after the Evaluator has selected a DistributionItem.
+ * These functions are called anytime an Item is selected during Execution.
  */
 UCLASS(BlueprintType, Blueprintable, Abstract)
 class RANDOMDISTRIBUTIONSYSTEM_API UDistributionItemSelectedEvaluator : public UEvaluatorBase

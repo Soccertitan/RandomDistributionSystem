@@ -4,6 +4,11 @@
 #include "RandomDistributionTypes.h"
 
 
+FRandomDistributionRow::FRandomDistributionRow()
+{
+	Guid = FGuid::NewGuid();
+}
+
 FRandomDistributionRow::FRandomDistributionRow(FName InName, const FRandomDistributionDataTable& TableRow)
 {
 	Name = InName;
@@ -13,4 +18,5 @@ FRandomDistributionRow::FRandomDistributionRow(FName InName, const FRandomDistri
 	bEnabled = TableRow.bEnabled;
 	OwnedTags = TableRow.OwnedTags;
 	Item = TableRow.Item;
+	Guid = FGuid::NewGuid();
 }

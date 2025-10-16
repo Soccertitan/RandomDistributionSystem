@@ -7,12 +7,12 @@ UEvaluatorBase::UEvaluatorBase()
 {
 }
 
-URandomDistributionExecutionEvaluator* UEvaluatorBase::K2_GetRandomDistributionEvaluator(
-	const TSubclassOf<URandomDistributionExecutionEvaluator> ExecutionClass) const
+URandomDistributionExecution* UEvaluatorBase::K2_GetRandomDistributionExecution(
+	const TSubclassOf<URandomDistributionExecution> ExecutionClass) const
 {
 	if (!ExecutionClass)
 	{
 		return nullptr;
 	}
-	return Cast<URandomDistributionExecutionEvaluator>(GetOuter());
+	return Cast<URandomDistributionExecution>(GetOuter());
 }
