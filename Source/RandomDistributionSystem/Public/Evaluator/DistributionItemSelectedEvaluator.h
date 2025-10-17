@@ -5,10 +5,9 @@
 #include "CoreMinimal.h"
 #include "EvaluatorBase.h"
 #include "UObject/Object.h"
+#include "RandomDistributionTypes.h"
 #include "DistributionItemSelectedEvaluator.generated.h"
 
-struct FRandomDistributionRow;
-struct FRandomDistributionExecutionParams;
 
 /**
  * These functions are called anytime an Item is selected during Execution.

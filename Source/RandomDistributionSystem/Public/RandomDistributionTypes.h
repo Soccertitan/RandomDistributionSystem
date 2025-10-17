@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "StructUtils/InstancedStruct.h"
-
+#include "Engine/DataTable.h"
 #include "RandomDistributionTypes.generated.h"
 
 /**
@@ -31,11 +31,11 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FDistributionItem_Table : public FDistributi
 	 * The maximum number of entries expected in the result. The final count of items in the result may be lower
 	 * if some of the entries return a null result (no drop).
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Item", meta = (ClampMin = 1, UIMin = 1))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (ClampMin = 1, UIMin = 1))
 	int32 Count = 1;
 
 	/** The RandomDistributionDataTable to evaluate. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Item", meta = (RequiredAssetDataTags = "RowStructure=/Script/RandomDistributionSystem.RandomDistributionDataTable"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (RequiredAssetDataTags = "RowStructure=/Script/RandomDistributionSystem.RandomDistributionDataTable"))
 	TObjectPtr<UDataTable> DataTable;
 };
 
@@ -47,10 +47,10 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FDistributionItem_TagValue : public FDistrib
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Item")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	FGameplayTag Tag;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Item")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	int32 Value = 0;
 };
 
@@ -62,7 +62,7 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FDistributionItem_Object : public FDistribut
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Item")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	TSoftObjectPtr<UObject> Object;
 };
 
@@ -74,7 +74,7 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FDistributionItem_Class : public FDistributi
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Item")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	TSoftClassPtr<UObject> Class;
 };
 
@@ -82,27 +82,27 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FDistributionItem_Class : public FDistributi
  * A DataTable struct containing data that will be copied to the execution.
  */
 USTRUCT()
-struct FRandomDistributionDataTable : public FTableRowBase
+struct RANDOMDISTRIBUTIONSYSTEM_API FRandomDistributionDataTable : public FTableRowBase
 {
 	GENERATED_BODY()
 
 	/** If false, this row cannot be selected. */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Row")
 	bool bEnabled = true;
 	/** The likelihood this entry will be selected. */
-	UPROPERTY(EditAnywhere, meta = (ClampMin = 0, UIMin = 0))
+	UPROPERTY(EditAnywhere, Category = "Row", meta = (ClampMin = 0, UIMin = 0))
 	float Probability = 0.f;
 	/** If true, this row can only be selected once. */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Row")
 	bool bIsUnique = false;
 	/** If true, this row will always be in the result at least once. */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Row")
 	bool bAlwaysPick = false;
 	/** GameplayTags this row has. */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Row")
 	FGameplayTagContainer OwnedTags;
 	/** The actual item you want to return. Leave empty to return nothing. */
-	UPROPERTY(EditAnywhere, meta = (ExcludeBaseStruct))
+	UPROPERTY(EditAnywhere, Category = "Row", meta = (ExcludeBaseStruct))
 	TInstancedStruct<FDistributionItem> Item;
 };
 
@@ -114,38 +114,36 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FRandomDistributionRow
 {
 	GENERATED_BODY()
 
-	FRandomDistributionRow();
+	FRandomDistributionRow() {}
 	FRandomDistributionRow(FName InName, const FRandomDistributionDataTable& TableRow);
 
+	/** The name of the row from the RandomDistributionDataTable */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
+	FName Name = NAME_None;
 	/** If false, this row cannot be selected. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Row")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
 	bool bEnabled = true;
 	/** The likelihood this entry will be selected. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Row", meta = (ClampMin = 0, UIMin = 0))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row", meta = (ClampMin = 0, UIMin = 0))
 	float Probability = 0.f;
 	/** If true, this row can only be selected once. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Row")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
 	bool bIsUnique = false;
 	/** If true, this row will always be in the result at least once. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Row")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
 	bool bAlwaysPick = false;
 	/** GameplayTags this row has. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Row")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
 	FGameplayTagContainer OwnedTags;
 	/** The actual item you want to return. Leave empty to return nothing. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Row", meta = (ExcludeBaseStruct))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row", meta = (ExcludeBaseStruct))
 	TInstancedStruct<FDistributionItem> Item;
 
-	FName GetRowName() const {return Name;}
-	
 private:
-	/** The unique name of the row from the RandomDistributionDataTable */
-	UPROPERTY(BlueprintReadOnly, Category = "Random Distribution System|Row", meta = (AllowPrivateAccess = true))
-	FName Name = NAME_None;
 
 	/** The unique GUID generated for this row to determine equality between rows. */
 	UPROPERTY()
-	FGuid Guid;
+	FGuid Guid = FGuid();
 
 public:
 	friend bool operator==(const FRandomDistributionRow& X, const FRandomDistributionRow& Y)
@@ -167,17 +165,17 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FRandomDistributionExecutionParams
 	GENERATED_BODY()
 
 	/** The RandomDistributionDataTable to execute. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Execution", meta = (RequiredAssetDataTags = "RowStructure=/Script/RandomDistributionSystem.RandomDistributionDataTable"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Params", meta = (RequiredAssetDataTags = "RowStructure=/Script/RandomDistributionSystem.RandomDistributionDataTable"))
 	TObjectPtr<UDataTable> DataTable;
 
 	/**
 	 * The number of results to return from the DataTable. The actual final result can be higher or lower depending on
 	 * if there are 'misses' or sub nested DataTables that can generate additional results.
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Execution", meta = (ClampMin = 1, UIMin = 1))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Params", meta = (ClampMin = 1, UIMin = 1))
 	int32 Count = 1;
 
 	/** Can contain custom information to pass along to evaluators. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Random Distribution System|Execution")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Params")
 	TObjectPtr<UObject> Context;
 };

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RandomDistributionExecution.h"
 #include "UObject/Object.h"
 #include "EvaluatorBase.generated.h"
 
@@ -21,8 +20,8 @@ public:
 	UEvaluatorBase();
 
 	/** Retrieves the outer of this Evaluator and casts to the passed in ExecutionClass. */
-	UFUNCTION(BlueprintPure, meta = (DeterminesOutputType=ExecutionClass), Category = "Random Distribution System|Evaluator", DisplayName = "GetRandomDistributionExecution")
-	URandomDistributionExecution* K2_GetRandomDistributionExecution(const TSubclassOf<URandomDistributionExecution> ExecutionClass) const;
+	UFUNCTION(BlueprintPure, Category = "Random Distribution System|Evaluator", DisplayName = "GetRandomDistributionExecution")
+	URandomDistributionExecution* K2_GetRandomDistributionExecution() const;
 
 	/** Retrieves the outer of this Evaluator and casts to the passed in type. */
 	template<class T>

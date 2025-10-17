@@ -4,11 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "EvaluatorBase.h"
+#include "RandomDistributionTypes.h"
 #include "PostResultEvaluator.generated.h"
 
-class URandomDistributionExecution;
-struct FRandomDistributionExecutionParams;
-struct FRandomDistributionRow;
 
 /**
  * Occurs after the Execution has finished and the result set is complete, but before

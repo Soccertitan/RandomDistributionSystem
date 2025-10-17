@@ -4,11 +4,6 @@
 #include "RandomDistributionTypes.h"
 
 
-FRandomDistributionRow::FRandomDistributionRow()
-{
-	Guid = FGuid::NewGuid();
-}
-
 FRandomDistributionRow::FRandomDistributionRow(FName InName, const FRandomDistributionDataTable& TableRow)
 {
 	Name = InName;

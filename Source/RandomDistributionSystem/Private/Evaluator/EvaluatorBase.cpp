@@ -3,16 +3,13 @@
 
 #include "Evaluator/EvaluatorBase.h"
 
+#include "RandomDistributionExecution.h"
+
 UEvaluatorBase::UEvaluatorBase()
 {
 }
 
-URandomDistributionExecution* UEvaluatorBase::K2_GetRandomDistributionExecution(
-	const TSubclassOf<URandomDistributionExecution> ExecutionClass) const
+URandomDistributionExecution* UEvaluatorBase::K2_GetRandomDistributionExecution() const
 {
-	if (!ExecutionClass)
-	{
-		return nullptr;
-	}
 	return Cast<URandomDistributionExecution>(GetOuter());
 }

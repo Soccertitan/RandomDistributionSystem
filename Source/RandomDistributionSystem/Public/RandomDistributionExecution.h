@@ -11,7 +11,6 @@ class URandomizerEvaluator;
 class UPostResultEvaluator;
 class UDistributionItemSelectedEvaluator;
 class UPreResultEvaluator;
-class URandomDistributionExecution;
 
 /**
  * URandomDistributionExecution
@@ -61,19 +60,19 @@ public:
 protected:
 
 	/** The randomizer to use when selecting a row. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, NoClear)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, NoClear, Category = "Evaluator")
 	TObjectPtr<URandomizerEvaluator> Randomizer;
 	
 	/** Called on each row in the DataTable and the DataTable itself prior to adding the rows to the array of SelectableRows. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, Category = "Evaluator")
 	TArray<TObjectPtr<UPreResultEvaluator>> PreResultEvaluators;
 
 	/** Called when a row is selected from the DataTable. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, Category = "Evaluator")
 	TArray<TObjectPtr<UDistributionItemSelectedEvaluator>> DistributionItemSelectedEvaluators;
 
 	/** Called at the end of GenerateResults. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, Category = "Evaluator")
 	TArray<TObjectPtr<UPostResultEvaluator>> PostResultEvaluators;
 
 private:

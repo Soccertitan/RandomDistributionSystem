@@ -7,7 +7,6 @@
 #include "RandomDistributionTypes.h"
 #include "RandomizerEvaluator.generated.h"
 
-struct FRandomDistributionExecutionParams;
 
 /**
  * The algorithm to use when selecting a row from a collection. The basic implementation adds up the probabilities and
