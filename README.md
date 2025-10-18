@@ -14,3 +14,11 @@ A lot of the design choices that were made stem from reading his article and I s
 <p><img width="501" height="209" alt="image" src="https://github.com/user-attachments/assets/c93f354d-d0aa-4f1c-9fe2-f229466eefbd" /></p>
 
 That's it to all you need to start generating random results from a DataTable. Read the source code for more information. As I have time, I will update this Readme with more details.
+
+## RandomDistriubtionItem Types
+The plugin comes with a 4 different item types. They should cover most cases, but if you need to extend them you will need C++ knowledge to create a new struct that inherits from RandomDistributionItem. If you want a chance of missing (nothing is chosen) set the Item to none.
+
+1. RandomDistribution_Table - A special struct that allows nesting of additional RandomDistributionRow DataTables.
+2. RandomDistribution_TagValue - A simple Tag/Value pair.
+3. RandomDistribution_Object - A soft object pointer.
+4. RandomDistribution_Class - A soft class object pointer.
