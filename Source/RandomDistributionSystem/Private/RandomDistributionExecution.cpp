@@ -1,4 +1,4 @@
-﻿// Copyright Soccertitan
+﻿// Copyright Soccertitan 2025
 
 
 #include "RandomDistributionExecution.h"
@@ -18,7 +18,7 @@ URandomDistributionExecution::URandomDistributionExecution()
 bool URandomDistributionExecution::GenerateResults(const FRandomDistributionExecutionParams& ExecutionParams, TArray<TInstancedStruct<FDistributionItem>>& OutResults)
 {
 	if (!ExecutionParams.DataTable ||
-		!ExecutionParams.DataTable->GetRowStruct()->IsChildOf(FRandomDistributionDataTable::StaticStruct()) ||
+		!ExecutionParams.DataTable->GetRowStruct()->IsChildOf(FRandomDistributionRow::StaticStruct()) ||
 		!Randomizer ||
 		ExecutionParams.Count <= 0)
 	{
@@ -53,10 +53,10 @@ void URandomDistributionExecution::EvaluateTable(const UDataTable* Table, int32 
 	// Then run the PreResultEvaluators to give designers a chance to modify the Row's value
 	// before running the randomizer.
 	//----------------------------------------------------------------------------------------
-	TArray<FRandomDistributionRow> MutableRows;
+	TArray<FRandomDistributionData> MutableRows;
 	for (const auto& It : Table->GetRowMap())
 	{
-		FRandomDistributionRow MutableRow = FRandomDistributionRow(It.Key, *(FRandomDistributionDataTable*)It.Value);
+		FRandomDistributionData MutableRow = FRandomDistributionData(It.Key, *(FRandomDistributionRow*)It.Value);
 
 		for (TObjectPtr<UPreResultEvaluator>& Evaluator : PreResultEvaluators)
 		{
@@ -86,8 +86,8 @@ void URandomDistributionExecution::EvaluateTable(const UDataTable* Table, int32 
 	// Then add the enabled rows to a SelectableRows array. This will get passed to the
 	// randomizer for processing.
 	//----------------------------------------------------------------------------------------
-	TArray<FRandomDistributionRow> SelectableRows;
-	for (FRandomDistributionRow& Row : MutableRows)
+	TArray<FRandomDistributionData> SelectableRows;
+	for (FRandomDistributionData& Row : MutableRows)
 	{
 		if (Row.bAlwaysPick && Row.bEnabled)
 		{
@@ -115,7 +115,7 @@ void URandomDistributionExecution::EvaluateTable(const UDataTable* Table, int32 
 	{
 		for (int32 CurrentCount = 0; CurrentCount < Count; CurrentCount++)
 		{
-			FRandomDistributionRow SelectedRow = Randomizer->SelectRow(ExecutionParams, SelectableRows);
+			FRandomDistributionData SelectedRow = Randomizer->SelectRow(ExecutionParams, SelectableRows);
 
 			if (SelectedRow.bIsUnique)
 			{
@@ -143,7 +143,7 @@ void URandomDistributionExecution::AddItemToResults(TInstancedStruct<FDistributi
 		if (const FDistributionItem_Table* Table = Item.GetPtr<FDistributionItem_Table>())
 		{
 			if (Table->DataTable &&
-				Table->DataTable->GetRowStruct()->IsChildOf(FRandomDistributionDataTable::StaticStruct()) &&
+				Table->DataTable->GetRowStruct()->IsChildOf(FRandomDistributionRow::StaticStruct()) &&
 				Table->Count > 0)
 			{
 				EvaluateTable(Table->DataTable.Get(), Table->Count, ExecutionParams, Results);

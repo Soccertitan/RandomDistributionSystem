@@ -1,4 +1,4 @@
-﻿// Copyright Soccertitan
+﻿// Copyright Soccertitan 2025
 
 
 #include "Evaluator/EvaluatorBase.h"

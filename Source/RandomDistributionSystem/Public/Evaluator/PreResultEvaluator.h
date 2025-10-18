@@ -1,4 +1,4 @@
-﻿// Copyright Soccertitan
+﻿// Copyright Soccertitan 2025
 
 #pragma once
 
@@ -7,7 +7,7 @@
 #include "PreResultEvaluator.generated.h"
 
 struct FRandomDistributionExecutionParams;
-struct FRandomDistributionRow;
+struct FRandomDistributionData;
 
 /**
  * This class can modify the values of the DistributionRows before they are processed in the Execution.
@@ -26,7 +26,7 @@ public:
 	 * @param ExecutionParams The context of the Evaluator.
 	 * @param Row The mutable row to update.
 	 */
-	virtual void EvaluateRowPreResult(const FRandomDistributionExecutionParams& ExecutionParams, FRandomDistributionRow& Row);
+	virtual void EvaluateRowPreResult(const FRandomDistributionExecutionParams& ExecutionParams, FRandomDistributionData& Row);
 
 	/**
 	 * Called after all rows have been evaluated in EvaluateRowPreResult. Allows you to modify the Rows array and
@@ -34,7 +34,7 @@ public:
 	 * @param ExecutionParams The context of the Evaluator.
 	 * @param Rows The mutable array of rows.
 	 */
-	virtual void EvaluateTablePreResult(const FRandomDistributionExecutionParams& ExecutionParams, TArray<FRandomDistributionRow>& Rows);
+	virtual void EvaluateTablePreResult(const FRandomDistributionExecutionParams& ExecutionParams, TArray<FRandomDistributionData>& Rows);
 
 protected:
 	
@@ -44,7 +44,7 @@ protected:
 	 * @param Row The mutable row to update.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, DisplayName = "EvaluateRowPreResult")
-	void K2_EvaluateRowPreResult(UPARAM(ref) const FRandomDistributionExecutionParams& ExecutionParams, UPARAM(ref) FRandomDistributionRow& Row);
+	void K2_EvaluateRowPreResult(UPARAM(ref) const FRandomDistributionExecutionParams& ExecutionParams, UPARAM(ref) FRandomDistributionData& Row);
 
 	/**
 	 * Called after all rows have been evaluated in EvaluateRowPreResult. Allows you to modify the Rows array and
@@ -53,5 +53,5 @@ protected:
 	 * @param Rows The mutable array of rows.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, DisplayName = "EvaluateTablePreResult")
-	void K2_EvaluateTablePreResult(UPARAM(ref) const FRandomDistributionExecutionParams& ExecutionParams, UPARAM(ref) TArray<FRandomDistributionRow>& Rows);
+	void K2_EvaluateTablePreResult(UPARAM(ref) const FRandomDistributionExecutionParams& ExecutionParams, UPARAM(ref) TArray<FRandomDistributionData>& Rows);
 };

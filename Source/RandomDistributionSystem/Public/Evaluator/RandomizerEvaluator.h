@@ -1,4 +1,4 @@
-﻿// Copyright Soccertitan
+﻿// Copyright Soccertitan 2025
 
 #pragma once
 
@@ -27,5 +27,5 @@ public:
 	 * @return A copy of the Row that was chosen.
 	 */
 	UFUNCTION(BlueprintNativeEvent)
-	FRandomDistributionRow SelectRow(UPARAM(ref) const FRandomDistributionExecutionParams& ExecutionParams, UPARAM(ref) TArray<FRandomDistributionRow>& SelectableRows);
+	FRandomDistributionData SelectRow(UPARAM(ref) const FRandomDistributionExecutionParams& ExecutionParams, UPARAM(ref) TArray<FRandomDistributionData>& SelectableRows);
 };

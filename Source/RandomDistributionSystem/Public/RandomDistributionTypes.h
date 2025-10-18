@@ -1,4 +1,4 @@
-﻿// Copyright Soccertitan
+﻿// Copyright Soccertitan 2025
 
 #pragma once
 
@@ -35,7 +35,7 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FDistributionItem_Table : public FDistributi
 	int32 Count = 1;
 
 	/** The RandomDistributionDataTable to evaluate. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (RequiredAssetDataTags = "RowStructure=/Script/RandomDistributionSystem.RandomDistributionDataTable"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (RequiredAssetDataTags = "RowStructure=/Script/RandomDistributionSystem.RandomDistributionRow"))
 	TObjectPtr<UDataTable> DataTable;
 };
 
@@ -82,7 +82,7 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FDistributionItem_Class : public FDistributi
  * A DataTable struct containing data that will be copied to the execution.
  */
 USTRUCT()
-struct RANDOMDISTRIBUTIONSYSTEM_API FRandomDistributionDataTable : public FTableRowBase
+struct RANDOMDISTRIBUTIONSYSTEM_API FRandomDistributionRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
@@ -107,36 +107,36 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FRandomDistributionDataTable : public FTable
 };
 
 /**
- * A mutable struct used in the RandomDistributionExecution.
+ * A mutable copy of the RandomDistributionRow used in the RandomDistributionExecution.
  */
 USTRUCT(BlueprintType)
-struct RANDOMDISTRIBUTIONSYSTEM_API FRandomDistributionRow
+struct RANDOMDISTRIBUTIONSYSTEM_API FRandomDistributionData
 {
 	GENERATED_BODY()
 
-	FRandomDistributionRow() {}
-	FRandomDistributionRow(FName InName, const FRandomDistributionDataTable& TableRow);
+	FRandomDistributionData() {}
+	FRandomDistributionData(FName InName, const FRandomDistributionRow& TableRow);
 
 	/** The name of the row from the RandomDistributionDataTable */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FName Name = NAME_None;
 	/** If false, this row cannot be selected. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	bool bEnabled = true;
 	/** The likelihood this entry will be selected. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row", meta = (ClampMin = 0, UIMin = 0))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data", meta = (ClampMin = 0, UIMin = 0))
 	float Probability = 0.f;
 	/** If true, this row can only be selected once. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	bool bIsUnique = false;
 	/** If true, this row will always be in the result at least once. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	bool bAlwaysPick = false;
 	/** GameplayTags this row has. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FGameplayTagContainer OwnedTags;
 	/** The actual item you want to return. Leave empty to return nothing. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Row", meta = (ExcludeBaseStruct))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data", meta = (ExcludeBaseStruct))
 	TInstancedStruct<FDistributionItem> Item;
 
 private:
@@ -146,11 +146,11 @@ private:
 	FGuid Guid = FGuid();
 
 public:
-	friend bool operator==(const FRandomDistributionRow& X, const FRandomDistributionRow& Y)
+	friend bool operator==(const FRandomDistributionData& X, const FRandomDistributionData& Y)
 	{
 		return X.Guid == Y.Guid;
 	}
-	friend bool operator!=(const FRandomDistributionRow& X, const FRandomDistributionRow& Y)
+	friend bool operator!=(const FRandomDistributionData& X, const FRandomDistributionData& Y)
 	{
 		return X.Guid != Y.Guid;
 	}
@@ -165,7 +165,7 @@ struct RANDOMDISTRIBUTIONSYSTEM_API FRandomDistributionExecutionParams
 	GENERATED_BODY()
 
 	/** The RandomDistributionDataTable to execute. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Params", meta = (RequiredAssetDataTags = "RowStructure=/Script/RandomDistributionSystem.RandomDistributionDataTable"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Params", meta = (RequiredAssetDataTags = "RowStructure=/Script/RandomDistributionSystem.RandomDistributionRow"))
 	TObjectPtr<UDataTable> DataTable;
 
 	/**

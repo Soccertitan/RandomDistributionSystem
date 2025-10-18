@@ -1,10 +1,10 @@
-﻿// Copyright Soccertitan
+﻿// Copyright Soccertitan 2025
 
 
 #include "RandomDistributionTypes.h"
 
 
-FRandomDistributionRow::FRandomDistributionRow(FName InName, const FRandomDistributionDataTable& TableRow)
+FRandomDistributionData::FRandomDistributionData(FName InName, const FRandomDistributionRow& TableRow)
 {
 	Name = InName;
 	Probability = TableRow.Probability;
